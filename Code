@@ -1,0 +1,35 @@
+
+import nltk
+from nltk import CFG
+from IPython.display import display
+
+grammar = CFG.fromstring("""
+S -> NP VP
+NP -> Pronoun | Det N | Det N PP | NP PP | NP RelativeClause
+VP -> V NP | VP PP | V Adj | V Inf | V Adj Inf
+PP -> P NP
+Inf -> 'to' V
+RelativeClause -> Pronoun VP
+Det -> 'the' | 'a' | 'The'
+N -> 'man' | 'telescope' | 'chicken' | 'relatives' | 'girl' | 'dog' | 'car' | 'boy'
+Pronoun -> 'I' | 'he' | 'she' | 'who' | 'She' | 'He'
+V -> 'saw' | 'is' | 'eat' | 'ready' | 'be' | 'can' | 'visiting' | 'running' | 'had' | 'loved'
+P -> 'with' | 'in' | 'on' | 'behind'
+Adj -> 'ready' | 'boring' | 'happy'
+""")
+
+sentence_input = input("Enter a simple sentence: ").strip().split()
+sentence_input[0] = sentence_input[0].capitalize()
+
+parser = nltk.ChartParser(grammar)
+trees = list(parser.parse(sentence_input))
+
+if trees:
+    print(f"\nTotal Parse Trees Found: {len(trees)}\n")
+    for i, tree in enumerate(trees, start=1):
+        print(f"Parse Tree {i}:")
+        tree.pretty_print()
+        display(tree)
+else:
+    print("\nNo valid parse tree found for this sentence with the current grammar.")
+```
